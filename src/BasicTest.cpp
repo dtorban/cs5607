@@ -11,22 +11,15 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 int main(void){
 
-	// Initialize glfw
+	GLFWwindow* window;
 	glfwSetErrorCallback(error_callback);
-	if(!glfwInit()){ exit(EXIT_FAILURE); }
-
-	#ifdef USE_APPLE
-	glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 2);
-	glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	#endif
-
-	// Set up window
-	GLFWwindow* window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
-	if(!window){
-		glfwTerminate();
-		exit(EXIT_FAILURE);
+	if (!glfwInit())
+	exit(EXIT_FAILURE);
+	window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+	if (!window)
+	{
+	glfwTerminate();
+	exit(EXIT_FAILURE);
 	}
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
