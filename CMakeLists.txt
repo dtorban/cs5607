@@ -27,7 +27,7 @@ source_group("Header Files" FILES ${HEADERFILES})
 # Download dependencies
 #------------------------------------------
 
-set(glfw_checkout_Dir ${CMAKE_SOURCE_DIR}/lib/glfw)
+set(glfw_checkout_Dir ${CMAKE_BINARY_DIR}/glfw)
 make_directory(${glfw_checkout_Dir})
 include(ExternalProject)
 
@@ -48,7 +48,7 @@ endif()
 ExternalProject_add(glfw
 		PREFIX ${glfw_PREFIX}
 		GIT_REPOSITORY https://github.com/ivlab/glfw.git
-		GIT_TAG gpu-affinity
+		GIT_TAG master
 		INSTALL_DIR ${glfw_INSTALL_DIR}
 		CMAKE_ARGS ${glfw_CMAKE_ARGS}
 		UPDATE_COMMAND ""
@@ -69,6 +69,11 @@ find_package(OpenGL REQUIRED)
 set(OPENGL_LIBRARIES ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
 set(OPENGL_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
 include_directories(${OPENGL_INCLUDE_DIRS})
+
+# GLEW
+add_definitions(-DGLEW_STATIC)
+add_subdirectory(lib/glew)
+include_directories(lib/glew/include)
 
 #------------------------------------------
 # Include Directories
@@ -137,8 +142,8 @@ endif()
 # Build Target
 add_executable ( ${PROJECT_NAME} ${HEADERFILES} ${SOURCEFILES} )
 
-target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} ${LIBS_ALL})
-add_dependencies( ${PROJECT_NAME} glfw)
+target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY} glew ${OPENGL_LIBRARIES} ${LIBS_ALL})
+add_dependencies( ${PROJECT_NAME} glfw glew)
 
 #install(DIRECTORY ${PROJECT_NAME}/include/ DESTINATION include)
 
